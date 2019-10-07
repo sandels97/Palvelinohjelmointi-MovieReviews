@@ -6,6 +6,22 @@
  <link type="text/css"rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
 </head>
 <body>
-	<h1>Movies</h1>
+	<h1>List of movies</h1>
+	<table class="table table-striped">
+	  <tr>
+	    <th>Title</th>
+	    <th>Release Year</th>
+	    <th>Genre</th>
+	    <th>Average score</th>
+	    <th>Votes</th>
+	  </tr>
+		<tr th:each="movie : ${movies}">
+			<td th:text="${movie.title}"></td>
+			<td th:text="${movie.releaseYear}"></td>
+			<td th:text="${movie.genre.name}"></td>
+			<td><span th:text="${movie.averageScore}"></span> / 5.0</td>
+			<td th:text="${movie.votes}"></td>
+		</tr>
+	</table>
 </body>
 </html>

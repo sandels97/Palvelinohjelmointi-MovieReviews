@@ -8,24 +8,27 @@ import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+//Represents a movie review left by an user
+
 @Entity
 public class Review {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;
 
-	//From 1 to 5
-	private long score;
+	private long score; //Review score from 1 to 5
 	
 	@ManyToOne
 	@JsonIgnore
-	@JoinColumn(name="movieId")
-	private Movie movie;
+	@JoinColumn(name="movieid")
+	private Movie movie; //Movie that was reviewed
 	
 	@ManyToOne
 	@JsonIgnore
-	@JoinColumn(name="userId")
-	private User user;
+	@JoinColumn(name="userid")
+	private User user; //User who left the review
+	
+	public Review() {}
 	
 	public Review(Movie movie, User user, long score) {
 		this.score = score;

@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -21,17 +22,28 @@ public class Movie {
 	private String title;
 	private long releaseYear;
 	
+	@JsonIgnore
+	@Transient
+	private double averageScore = 0; //Average score of the movie. Do not save it to database, because it's calculated from the reviews. 
+	
+	@JsonIgnore
+	@Transient
+	private int votes = 0; //Review count for the movie. Do not save it to database, because it's calculated from the reviews.
+	
 	@ManyToOne
 	@JsonIgnore
-	@JoinColumn(name="genreId")
+	@JoinColumn(name="genreid")
 	private Genre genre;
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="movie")
 	private List<Review> reviews;
 
+	public Movie() {}
+	
 	public Movie(String title, long releaseYear, Genre genre) {
 		this.title = title;
 		this.releaseYear = releaseYear;
+		this.genre = genre;
 	}
 
 	public long getId() {
@@ -73,4 +85,21 @@ public class Movie {
 	public void setReviews(List<Review> reviews) {
 		this.reviews = reviews;
 	}
+
+	public double getAverageScore() {
+		return averageScore;
+	}
+
+	public void setAverageScore(double averageScore) {
+		this.averageScore = averageScore;
+	}
+
+	public int getVotes() {
+		return votes;
+	}
+
+	public void setVotes(int votes) {
+		this.votes = votes;
+	}
+	
 }

@@ -8,6 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+//Represents movie genres e.g. Action, Horror and Drama
+
 @Entity
 public class Genre {
 	@Id
@@ -19,6 +21,8 @@ public class Genre {
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="genre")
 	private List<Movie> movies;
 
+	public Genre() {}
+	
 	public Genre(String name) {
 		this.name = name;
 	}
