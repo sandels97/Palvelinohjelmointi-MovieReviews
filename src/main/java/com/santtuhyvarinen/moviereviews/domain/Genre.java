@@ -20,7 +20,6 @@ public class Genre {
 	private List<Movie> movies;
 
 	public Genre(String name) {
-		super();
 		this.name = name;
 	}
 
@@ -38,6 +37,14 @@ public class Genre {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public List<Movie> getMovies() {
+		return movies;
+	}
+
+	public void setMovies(List<Movie> movies) {
+		this.movies = movies;
 	}
 
 }
