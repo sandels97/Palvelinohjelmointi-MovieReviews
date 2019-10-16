@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Books</title>
+ <link type="text/css"rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+ <link type="text/css"rel="stylesheet" href="/css/add.book.css" th:href="@{/css/add.book.css}" />
+</head>
+<body>
+
+	<div id="main">
+		<h1 th:text="${title}"></h1>
+		<form id="#" th:object="${movie}" th:action="@{/save}" action="#" method="post">
+			<input type="hidden" th:field="*{id}" />
+			<label for="title">Title</label>
+			<input type="text" id="title" th:field="*{title}"/>
+			<label for="releaseYear">Release year</label>
+			<input type="number" id="releaseYear" th:field="*{releaseYear}"/>
+			
+			<input type="submit" value="Save"/>
+			
+			<label for="genre_list">Category</label>
+			<select th:field="*{genre}" class="custom-select">
+			<option th:each="genre: ${genres}"
+					th:value="${genre.id}"
+					th:text="${genre.name}"></option>
+			</select>
+		</form>
+
+	</div>
+</body>
+</html>
