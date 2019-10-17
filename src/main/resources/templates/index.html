@@ -7,6 +7,8 @@
 </head>
 <body>
 	<h1>List of movies</h1>
+	
+	<!--List of all movies in the database-->
 	<table class="table table-striped">
 	  <tr>
 	    <th>Title</th>
@@ -14,19 +16,20 @@
 	    <th>Genre</th>
 	    <th>Average score</th>
 	    <th>Votes</th>
-	    <th>Edit</th>
-	    <th sec:authorize="hasAuthority('ADMIN')">Delete</th>
 	  </tr>
 		<tr th:each="movie : ${movies}">
-			<td th:text="${movie.title}"></td>
+			<td><a th:text="${movie.title}" th:href="@{/movie/{id}(id=${movie.id})}"></a></td>
 			<td th:text="${movie.releaseYear}"></td>
 			<td th:text="${movie.genre.name}"></td>
 			<td><span th:text="${movie.averageScore}"></span> / 5.0</td>
 			<td th:text="${movie.votes}"></td>
-			<td><a th:href="@{/edit/{id}(id=${movie.id})}">Edit</a></td>
-			<td sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/delete/{id}(id=${movie.id})}">Delete</a></td>
 		</tr>
 	</table>
 	<p><a th:href="@{/add}">Add a movie to collection</a></p>
+	
+	<!--Log out-->
+	<form th:action="@{/logout}" method="post">
+		<input type="submit" value="Sign Out"/>
+	</form>
 </body>
 </html>

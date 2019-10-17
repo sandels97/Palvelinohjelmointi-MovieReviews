@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="ISO-8859-1">
+<title th:text="${movie.title}"></title>
+ <link type="text/css"rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+</head>
+<body>
+	<h1 th:text="${movie.title}"></h1>
+	<p th:text="${movie.releaseYear}"></p>
+	<p th:text="${movie.genre.name}"></p>
+	<p th:text="${movie.averageScore}"></p>
+	<p th:text="${movie.votes}"></p>
+	<a th:href="@{/edit/{id}(id=${movie.id})}">Edit</a></td>
+	<a sec:authorize="hasAuthority('ADMIN')" th:href="@{/delete/{id}(id=${movie.id})}">Delete</a>
+	<a th:href="@{/leaverating/{username}/{movieid}/{rating}(movieid=${movie.id}, username=${#httpServletRequest.remoteUser}, rating=5)}">Leave a rating</a>
+
+	<p><a th:href="@{/index}">Go back to collection</a></p>
+	
+	<div>
+		<form method="POST" enctype="multipart/form-data" action="/">
+			<table>
+				<tr><td>File to upload:</td><td><input type="file" name="file" /></td></tr>
+				<tr><td></td><td><input type="submit" value="Upload" /></td></tr>
+			</table>
+		</form>
+	</div>
+	
+</body>
+</html>
