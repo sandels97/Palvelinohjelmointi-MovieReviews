@@ -7,13 +7,35 @@
 </head>
 <body>
 	<h1 th:text="${movie.title}"></h1>
-	<p th:text="${movie.releaseYear}"></p>
-	<p th:text="${movie.genre.name}"></p>
-	<p th:text="${movie.averageScore}"></p>
-	<p th:text="${movie.votes}"></p>
-	<a th:href="@{/edit/{id}(id=${movie.id})}">Edit</a></td>
-	<a sec:authorize="hasAuthority('ADMIN')" th:href="@{/delete/{id}(id=${movie.id})}">Delete</a>
-	<a th:href="@{/leaverating/{username}/{movieid}/{rating}(movieid=${movie.id}, username=${#httpServletRequest.remoteUser}, rating=5)}">Leave a rating</a>
+	
+	<table>
+		<tr>
+	    	<th>Release Year</th>
+	    	<th>Genre</th>
+	   		<th>Average score</th>
+	    	<th>Votes</th>
+	    	<th>Leave a rating (1-5)</th>
+	    	<th>Edit</th>
+	    	<th sec:authorize="hasAuthority('ADMIN')">Delete</th>
+	  	</tr>
+	
+		<tr>
+			<td th:text="${movie.releaseYear}"></td>
+			<td th:text="${movie.genre.name}"></td>
+			<td th:text="${movie.averageScore}"></td>
+			<td th:text="${movie.votes}"></td>
+			<td>	
+				<form id="#" th:object="${score}" 
+					th:action="@{/leaverating/{username}/{movieid}(movieid=${movie.id}, username=${#httpServletRequest.remoteUser})}" 
+						action="#" method="post">
+					<input type="number" id="score" th:field="*{score}" name="rating" min="1" max="5">
+					<input type="submit" value="Submit"/>
+				</form>
+			</td>
+			<td><a th:href="@{/edit/{id}(id=${movie.id})}">Edit</a></td>
+			<td><a sec:authorize="hasAuthority('ADMIN')" th:href="@{/delete/{id}(id=${movie.id})}">Delete</a></td>
+		</tr>
+	</table>
 
 	<p><a th:href="@{/index}">Go back to collection</a></p>
 	
