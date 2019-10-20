@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.santtuhyvarinen.moviereviews.domain.Movie;
@@ -150,11 +151,11 @@ public class MovieController {
 		return "redirect:/movie/" + movieId;
 	}
 	
-	//Save a new movie to database
+	//Save movie to database
 	@PostMapping("/save") 
 	public String save(Movie movie){
 		movieRepository.save(movie);
-		return "redirect:/index";
+		return "redirect:/movie/" + movie.getId();
 	}
 	
 	//Delete movie from database
@@ -181,5 +182,11 @@ public class MovieController {
 			}
 		}
 	    return "redirect:/movie/" + movieId;
+	}
+	
+	@RequestMapping("/movies") 
+	
+	public @ResponseBody List<Movie> getAllMovies(){
+		return (List<Movie>) movieRepository.findAll();
 	}
 }

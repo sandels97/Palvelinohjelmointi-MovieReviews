@@ -24,6 +24,7 @@ public class Movie {
 	private long releaseYear;
 	
 	@Lob
+	@JsonIgnore
 	private byte[] posterData;
 	
 	@JsonIgnore
