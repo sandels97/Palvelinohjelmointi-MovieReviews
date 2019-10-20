@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
@@ -22,13 +23,20 @@ public class Movie {
 	private String title;
 	private long releaseYear;
 	
-	@JsonIgnore
-	@Transient
-	private double averageScore = 0; //Average score of the movie. Do not save it to database, because it's calculated from the reviews. 
+	@Lob
+	private byte[] posterData;
 	
 	@JsonIgnore
 	@Transient
-	private int votes = 0; //Review count for the movie. Do not save it to database, because it's calculated from the reviews.
+	private String base64ImagePoster = "";
+	
+	@JsonIgnore
+	@Transient
+	private double averageScore = 0; //Average score of the movie. Do not save it to database, because it's calculated from the reviews on runtime. 
+	
+	@JsonIgnore
+	@Transient
+	private int votes = 0; //Review count for the movie. Do not save it to database, because it's calculated from the reviews on runtime.
 	
 	@ManyToOne
 	@JsonIgnore
@@ -101,5 +109,20 @@ public class Movie {
 	public void setVotes(int votes) {
 		this.votes = votes;
 	}
-	
+
+	public byte[] getPosterData() {
+		return posterData;
+	}
+
+	public void setPosterData(byte[] posterData) {
+		this.posterData = posterData;
+	}
+
+	public String getBase64ImagePoster() {
+		return base64ImagePoster;
+	}
+
+	public void setBase64ImagePoster(String base64ImagePoster) {
+		this.base64ImagePoster = base64ImagePoster;
+	}
 }

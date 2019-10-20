@@ -29,8 +29,11 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter {
 			.permitAll()
 			.defaultSuccessUrl("/index", true)
 		.and()
-		.logout()
-			.permitAll();
+			.logout()
+			.permitAll()
+		.and()
+			.csrf()
+			.disable();
 	}
 	
 	@Autowired

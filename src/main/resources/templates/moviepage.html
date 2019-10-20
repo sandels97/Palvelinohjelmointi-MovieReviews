@@ -36,13 +36,15 @@
 			<td><a sec:authorize="hasAuthority('ADMIN')" th:href="@{/delete/{id}(id=${movie.id})}">Delete</a></td>
 		</tr>
 	</table>
-
+	
+	<img th:src="'data:image/jpeg;base64,' + ${movie.base64ImagePoster}"/>
+	
 	<p><a th:href="@{/index}">Go back to collection</a></p>
 	
 	<div>
-		<form method="POST" enctype="multipart/form-data" action="/">
+		<form method="POST" id="#" action="#" enctype="multipart/form-data" th:action="@{/uploadfile/{id}(id=${movie.id})}">
 			<table>
-				<tr><td>File to upload:</td><td><input type="file" name="file" /></td></tr>
+				<tr><td>Poster to upload (jpeg):</td><td><input type="file" name="file" /></td></tr>
 				<tr><td></td><td><input type="submit" value="Upload" /></td></tr>
 			</table>
 		</form>
