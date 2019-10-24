@@ -39,12 +39,6 @@ public class MovieReviewsApplication {
 			
 			User user = userRepository.save(new User("user","$2a$06$3jYRJrg0ghaaypjZ/.g4SethoeA51ph3UD4kZi9oPkeMTpjKU5uo6","USER"));
 			User admin = userRepository.save(new User("admin","$2a$10$0MMwY.IQqpsVc1jC8u7IJ.2rT8b0Cd3b3sfIBGV2zfgnPGtT4r0.C","ADMIN"));
-			
-			/*Review review1 = reviewRepository.save(new Review(heat,user,5));
-			Review review2 = reviewRepository.save(new Review(halloween,user,4));
-			Review review3 = reviewRepository.save(new Review(heat,admin,3));
-			Review review4 = reviewRepository.save(new Review(lotr,admin,2));
-			Review review5 = reviewRepository.save(new Review(halloween,admin,3));*/
 		};
 	}
 }
