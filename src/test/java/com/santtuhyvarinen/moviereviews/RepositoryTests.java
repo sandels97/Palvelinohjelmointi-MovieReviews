@@ -38,37 +38,73 @@ public class RepositoryTests {
 	@Test
 	public void testRepositories() {
 		
+		//Test genre repository
+		Genre action = genreRepository.save(new Genre("Action"));
+		assertThat(genreRepository.findById(action.getId())).isNotNull();
+		
+		//Test movie repository
+		Movie heat = movieRepository.save(new Movie("Heat", 1995, action));
+		assertThat(movieRepository.findById(heat.getId())).isNotNull();
+		
+		//Test user repository
+		User user = userRepository.save(new User("testuser","$2a$06$3jYRJrg0ghaaypjZ/.g4SethoeA51ph3UD4kZi9oPkeMTpjKU5uo6","USER"));
+		assertThat(userRepository.findByUsername(user.getUsername())).isNotNull();
+		
+		//Test review repository
+		reviewRepository.save(new Review(heat,user,5));
+		Review review = reviewRepository.findByMovieAndUser(heat, user).get(0);
+		assertThat(review).isNotNull();
+	}
+	
+	/*private void addTestDataToRepositories() {
 		Genre action = genreRepository.save(new Genre("Action"));
 		Genre horror = genreRepository.save(new Genre("Horror"));
 		Genre drama = genreRepository.save(new Genre("Drama"));
 		Genre fantasy = genreRepository.save(new Genre("Fantasy"));
 		
-		List<Genre> genres = (List<Genre>) genreRepository.findAll();
-		
-		//Test that genre can be found by it's id and name
-		assertThat(genreRepository.findById(drama.getId())).isNotNull();
-		assertThat(genreRepository.findByName(fantasy.getName())).isNotNull();
-		
 		Movie heat = movieRepository.save(new Movie("Heat", 1995, action));
 		Movie halloween = movieRepository.save(new Movie("Halloween", 1978, horror));
 		Movie cuckoo = movieRepository.save(new Movie("One Flew Over the Cuckoo's Nest", 1975, drama));
 		Movie lotr = movieRepository.save(new Movie("The Lord of the Rings: The Fellowship of the Ring", 2001, fantasy));
-		List<Movie> movies = (List<Movie>) movieRepository.findAll();
-		
-		//Do the same tests for movie repository
-		assertThat(movieRepository.findById(heat.getId())).isNotNull();
-		assertThat(movieRepository.findByTitle(cuckoo.getTitle())).isNotNull();
 		
 		User user = userRepository.save(new User("testuser","$2a$06$3jYRJrg0ghaaypjZ/.g4SethoeA51ph3UD4kZi9oPkeMTpjKU5uo6","USER"));
 		
 		reviewRepository.save(new Review(heat,user,5));
 		reviewRepository.save(new Review(halloween,user,4));
 		reviewRepository.save(new Review(lotr,user,2));
-
-		Review review = reviewRepository.findByMovieAndUser(heat, user).get(0);
+	}*/
+	
+	//Test MovieUtil.java methods
+	@Test
+	public void testMovieUtil() {
+		Genre action = genreRepository.save(new Genre("Action"));
+		Genre horror = genreRepository.save(new Genre("Horror"));
+		Genre drama = genreRepository.save(new Genre("Drama"));
 		
-		//Test that review exists
-		assertThat(review).isNotNull();
+		Movie heat = movieRepository.save(new Movie("Heat", 1995, action));
+		Movie halloween = movieRepository.save(new Movie("Halloween", 1978, horror));
+		Movie cuckoo = movieRepository.save(new Movie("One Flew Over the Cuckoo's Nest", 1975, drama));
+		
+		User user1 = userRepository.save(new User("testuser1","$2a$06$3jYRJrg0ghaaypjZ/.g4SethoeA51ph3UD4kZi9oPkeMTpjKU5uo6","USER"));
+		User user2 = userRepository.save(new User("testuser2","$2a$06$3jYRJrg0ghaaypjZ/.g4SethoeA51ph3UD4kZi9oPkeMTpjKU5uo6","USER"));
+		User user3 = userRepository.save(new User("testuser3","$2a$06$3jYRJrg0ghaaypjZ/.g4SethoeA51ph3UD4kZi9oPkeMTpjKU5uo6","USER"));
+		
+		reviewRepository.save(new Review(heat,user1,5));
+		reviewRepository.save(new Review(heat,user2,3));
+		
+		reviewRepository.save(new Review(halloween,user1,5));
+		reviewRepository.save(new Review(halloween,user2,3));
+		reviewRepository.save(new Review(halloween,user3,1));
+		
+		//Test that the calculating average score for movies from the reviews work correctly
+		assertThat(MovieUtil.calculateAverageScoreFromReviews(heat, reviewRepository.findByMovie(heat))).isEqualTo(4);
+		assertThat(MovieUtil.calculateAverageScoreFromReviews(halloween, reviewRepository.findByMovie(halloween))).isEqualTo(3);
+		assertThat(MovieUtil.calculateAverageScoreFromReviews(cuckoo, reviewRepository.findByMovie(cuckoo))).isEqualTo(0);
+		
+		//Test that the calculating votes for movies from the reviews work correctly
+		assertThat(MovieUtil.calculateVotes(heat, reviewRepository.findByMovie(heat))).isEqualTo(2);
+		assertThat(MovieUtil.calculateVotes(halloween, reviewRepository.findByMovie(halloween))).isEqualTo(3);
+		assertThat(MovieUtil.calculateVotes(cuckoo, reviewRepository.findByMovie(cuckoo))).isEqualTo(0);
 	}
 	
 }

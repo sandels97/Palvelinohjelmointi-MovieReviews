@@ -20,6 +20,10 @@ public class MovieUtil {
 				reviewCount ++;
 			}
 		}
+		
+		if(reviewCount == 0) {
+			return 0;
+		}
 
 		//Return the average score
 		return sum / reviewCount;

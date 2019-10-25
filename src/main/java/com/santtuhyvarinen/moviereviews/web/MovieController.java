@@ -107,7 +107,7 @@ public class MovieController {
 	}
 	
 	
-	//Add a movie -page
+	//Add a movie
 	@RequestMapping(value="/add")
 	public String addBook(Model model) {
 		model.addAttribute("title","Add a movie to the collection");
@@ -184,9 +184,14 @@ public class MovieController {
 	    return "redirect:/movie/" + movieId;
 	}
 	
-	@RequestMapping("/movies") 
-	
+	//REST API
+	@RequestMapping("/api/movies") 
 	public @ResponseBody List<Movie> getAllMovies(){
 		return (List<Movie>) movieRepository.findAll();
+	}
+	
+	@RequestMapping("/api/movies/{title}") 
+	public @ResponseBody List<Movie> getAllReviews(@PathVariable("title") String title){
+		return (List<Movie>) movieRepository.findByTitle(title);
 	}
 }
