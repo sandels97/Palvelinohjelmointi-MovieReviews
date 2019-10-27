@@ -38,11 +38,10 @@ public class MovieReviewsApplication {
 			Movie heat = movieRepository.save(new Movie("Heat", 1995, action));
 			Movie halloween = movieRepository.save(new Movie("Halloween", 1978, horror));
 			Movie cuckoo = movieRepository.save(new Movie("One Flew Over the Cuckoo's Nest", 1975, drama));
-			Movie lotr = movieRepository.save(new Movie("The Lord of the Rings: The Fellowship of the Ring", 2001, fantasy));
+			Movie lotr = movieRepository.save(new Movie("The Lord of the Rings: The Fellowship of the Ring", 2001, fantasy));*/
 			
-			User user = userRepository.save(new User("user","$2a$06$3jYRJrg0ghaaypjZ/.g4SethoeA51ph3UD4kZi9oPkeMTpjKU5uo6","USER"));*/
+			User user = userRepository.save(new User("user","$2a$06$3jYRJrg0ghaaypjZ/.g4SethoeA51ph3UD4kZi9oPkeMTpjKU5uo6","USER"));
 			
-
 			//Add admin account
 			userRepository.save(new User("admin","$2a$10$0MMwY.IQqpsVc1jC8u7IJ.2rT8b0Cd3b3sfIBGV2zfgnPGtT4r0.C","ADMIN"));
 		};
