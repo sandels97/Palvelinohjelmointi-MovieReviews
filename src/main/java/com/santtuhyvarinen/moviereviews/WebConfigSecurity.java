@@ -20,12 +20,13 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 	    http.authorizeRequests()
-			.antMatchers("/api/*")
+			.antMatchers("/api/*","/register", "/registerUser")
 			.permitAll()
 			.anyRequest()
 			.authenticated()
 		.and()
 			.formLogin()
+			.loginPage("/login")
 			.permitAll()
 			.defaultSuccessUrl("/index", true)
 		.and()

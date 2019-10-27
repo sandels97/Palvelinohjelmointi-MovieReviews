@@ -17,16 +17,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.santtuhyvarinen.moviereviews.domain.Movie;
 import com.santtuhyvarinen.moviereviews.domain.Review;
 import com.santtuhyvarinen.moviereviews.domain.Score;
 import com.santtuhyvarinen.moviereviews.domain.User;
+import com.santtuhyvarinen.moviereviews.domain.UserDTO;
 import com.santtuhyvarinen.moviereviews.interfaces.GenreRepository;
 import com.santtuhyvarinen.moviereviews.interfaces.MovieRepository;
 import com.santtuhyvarinen.moviereviews.interfaces.ReviewRepository;
 import com.santtuhyvarinen.moviereviews.interfaces.UserRepository;
 import com.santtuhyvarinen.moviereviews.MovieUtil;
+import com.santtuhyvarinen.moviereviews.UserService;
 
 @Controller
 public class MovieController {
@@ -43,6 +46,9 @@ public class MovieController {
 	@Autowired
 	private UserRepository userRepository;
 	
+	@Autowired
+	private UserService userService;
+
 	//List of all movies
 	@RequestMapping
 	public String index(Model model) {
@@ -60,6 +66,59 @@ public class MovieController {
 		}
 		model.addAttribute("movies", movies);
 		return "index";
+	}
+	
+	//Login to the service
+	@RequestMapping("/login")
+	public String login() {
+		return "login";
+	}
+	
+	//Register to the service
+	@RequestMapping("/register")
+	public String register(Model model) {
+		model.addAttribute("user", new UserDTO());
+		
+		return "register";
+	}
+	
+	//Try to create a new user
+	@PostMapping("/registerUser") 
+	public String registerUser(UserDTO userDTO, RedirectAttributes redirectAttrs){
+		
+		boolean success = userService.registerUser(userDTO);
+
+		if(!success) {
+			redirectAttrs.addFlashAttribute("error", "Username has already been taken by another user - please choose another one");
+			return "redirect:/register";
+		}
+		
+		redirectAttrs.addFlashAttribute("registered", true);
+		return "redirect:/login";
+	}
+	
+	//Admin page - user management
+	@RequestMapping("/adminpage")
+	@PreAuthorize("hasAuthority('ADMIN')")
+	public String adminPage(Model model) {
+
+		
+		List<User> users = (List<User>) userRepository.findAll();
+
+		User admin = null;
+		//Remove admin from the list
+		for(User user : users) {
+			if(user.getUsername().equals("admin")) {
+				admin = user;
+			}
+		}
+		
+		if(admin != null) {
+			users.remove(admin);
+		}
+		
+		model.addAttribute("users", users);
+		return "adminpage";
 	}
 	
 	//Movie's own page
@@ -109,16 +168,16 @@ public class MovieController {
 	
 	//Add a movie
 	@RequestMapping(value="/add")
-	public String addBook(Model model) {
+	public String addMovie(Model model) {
 		model.addAttribute("title","Add a movie to the collection");
 		model.addAttribute("movie", new Movie());
 		model.addAttribute("genres", genreRepository.findAll());
-		return	"editmovie";
+		return "editmovie";
 	}
 	
 	//Edit movie information
 	@RequestMapping(value="/edit/{id}")
-	public String editBook(@PathVariable("id") Long movieId, Model model) {
+	public String editMovie(@PathVariable("id") Long movieId, Model model) {
 		model.addAttribute("title", "Edit the movie");
 		model.addAttribute("movie", movieRepository.findById(movieId).get());
 		model.addAttribute("genres", genreRepository.findAll());
@@ -161,11 +220,18 @@ public class MovieController {
 	//Delete movie from database
 	@RequestMapping(value="/delete/{id}")
 	@PreAuthorize("hasAuthority('ADMIN')")
-	public String deleteBook(@PathVariable("id") Long movieId, Model model) {
+	public String deleteMovie(@PathVariable("id") Long movieId, Model model) {
 		movieRepository.deleteById(movieId);
 		return "redirect:/index";
 	}
-	
+
+	//Delete user from database
+	@RequestMapping(value="/delete/user/{id}")
+	@PreAuthorize("hasAuthority('ADMIN')")
+	public String deleteUser(@PathVariable("id") Long userId, Model model) {
+		userRepository.deleteById(userId);
+		return "redirect:/adminpage";
+	}
 	//Upload a poster for the movie
 	@PostMapping(value="/uploadfile/{id}")
 	public String submit(@PathVariable("id") Long movieId, @RequestParam("file") MultipartFile file) {
@@ -189,7 +255,10 @@ public class MovieController {
 	public @ResponseBody List<Movie> getAllMovies(){
 		return (List<Movie>) movieRepository.findAll();
 	}
-	
+	@RequestMapping("/api/users") 
+	public @ResponseBody List<User> getAllUsers(){
+		return (List<User>) userRepository.findAll();
+	}
 	@RequestMapping("/api/movies/{title}") 
 	public @ResponseBody List<Movie> getAllReviews(@PathVariable("title") String title){
 		return (List<Movie>) movieRepository.findByTitle(title);

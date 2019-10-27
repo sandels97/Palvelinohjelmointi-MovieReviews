@@ -26,7 +26,7 @@
 		</tr>
 	</table>
 	<p><a th:href="@{/add}">Add a movie to collection</a></p>
-	
+	<p><a sec:authorize="hasAuthority('ADMIN')" th:href="@{/adminpage}">Admin page</a></p>
 	<!--Log out-->
 	<form th:action="@{/logout}" method="post">
 		<input type="submit" value="Sign Out"/>

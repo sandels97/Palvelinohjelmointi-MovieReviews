@@ -6,6 +6,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.santtuhyvarinen.moviereviews.domain.Genre;
 import com.santtuhyvarinen.moviereviews.domain.Movie;
@@ -21,6 +23,11 @@ public class MovieReviewsApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(MovieReviewsApplication.class, args);
+	}
+	
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+	    return new BCryptPasswordEncoder();
 	}
 	
 	@Bean

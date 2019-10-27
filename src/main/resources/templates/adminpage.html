@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="ISO-8859-1">
+<title>Admin page</title>
+</head>
+<body>
+	<h1>Admin page</h1>
+	
+	<!--List of all users (except admin) in the database-->
+	<table class="table table-striped">
+	  <tr>
+	    <th>User</th>
+	    <th>Delete</th>
+	  </tr>
+		<tr th:each="user : ${users}">
+			<td th:text="${user.username}"></td>
+			<td><a sec:authorize="hasAuthority('ADMIN')" th:href="@{/delete/user/{id}(id=${user.id})}">Delete</a></td>
+		</tr>
+	</table>
+	<p><a th:href="@{/index}">Return to the main page</a></p>
+</body>
+</html>
