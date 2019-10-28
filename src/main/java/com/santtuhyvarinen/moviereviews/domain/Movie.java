@@ -31,13 +31,15 @@ public class Movie {
 	@Transient
 	private String base64ImagePoster = "";
 	
+	//Average score of the movie. Do not save it to database, because it's calculated from the reviews on runtime.
 	@JsonIgnore
 	@Transient
-	private double averageScore = 0; //Average score of the movie. Do not save it to database, because it's calculated from the reviews on runtime. 
+	private double averageScore = 0;  
 	
+	//Review count for the movie. Do not save it to database, because it's calculated from the reviews on runtime.
 	@JsonIgnore
 	@Transient
-	private int votes = 0; //Review count for the movie. Do not save it to database, because it's calculated from the reviews on runtime.
+	private int votes = 0; 
 	
 	@ManyToOne
 	@JsonIgnore

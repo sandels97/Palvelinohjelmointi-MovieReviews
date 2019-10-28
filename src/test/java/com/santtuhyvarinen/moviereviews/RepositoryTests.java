@@ -56,24 +56,6 @@ public class RepositoryTests {
 		assertThat(review).isNotNull();
 	}
 	
-	/*private void addTestDataToRepositories() {
-		Genre action = genreRepository.save(new Genre("Action"));
-		Genre horror = genreRepository.save(new Genre("Horror"));
-		Genre drama = genreRepository.save(new Genre("Drama"));
-		Genre fantasy = genreRepository.save(new Genre("Fantasy"));
-		
-		Movie heat = movieRepository.save(new Movie("Heat", 1995, action));
-		Movie halloween = movieRepository.save(new Movie("Halloween", 1978, horror));
-		Movie cuckoo = movieRepository.save(new Movie("One Flew Over the Cuckoo's Nest", 1975, drama));
-		Movie lotr = movieRepository.save(new Movie("The Lord of the Rings: The Fellowship of the Ring", 2001, fantasy));
-		
-		User user = userRepository.save(new User("testuser","$2a$06$3jYRJrg0ghaaypjZ/.g4SethoeA51ph3UD4kZi9oPkeMTpjKU5uo6","USER"));
-		
-		reviewRepository.save(new Review(heat,user,5));
-		reviewRepository.save(new Review(halloween,user,4));
-		reviewRepository.save(new Review(lotr,user,2));
-	}*/
-	
 	//Test MovieUtil.java methods
 	@Test
 	public void testMovieUtil() {

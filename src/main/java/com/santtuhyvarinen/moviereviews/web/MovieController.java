@@ -1,6 +1,7 @@
 package com.santtuhyvarinen.moviereviews.web;
 
 import java.io.IOException;
+
 import java.util.List;
 
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -50,10 +51,9 @@ public class MovieController {
 	private UserService userService;
 
 	//List of all movies
-	@RequestMapping
+	@RequestMapping("/index")
 	public String index(Model model) {
 
-		
 		List<Movie> movies = (List<Movie>) movieRepository.findAll();
 		List<Review> reviews = (List<Review>) reviewRepository.findAll();
 
@@ -102,11 +102,10 @@ public class MovieController {
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public String adminPage(Model model) {
 
-		
 		List<User> users = (List<User>) userRepository.findAll();
 
 		User admin = null;
-		//Remove admin from the list
+		//Remove admin from the user list
 		for(User user : users) {
 			if(user.getUsername().equals("admin")) {
 				admin = user;
@@ -119,6 +118,14 @@ public class MovieController {
 		
 		model.addAttribute("users", users);
 		return "adminpage";
+	}
+
+	//Delete user from database
+	@RequestMapping(value="/delete/user/{id}")
+	@PreAuthorize("hasAuthority('ADMIN')")
+	public String deleteUser(@PathVariable("id") Long userId, Model model) {
+		userRepository.deleteById(userId);
+		return "redirect:/adminpage";
 	}
 	
 	//Movie's own page
@@ -204,7 +211,7 @@ public class MovieController {
 			//Leave a new review
 			review = new Review(movie, user, score.getScore());
 		}
-		System.out.println("Rating");
+		
 		reviewRepository.save(review);
 		
 		return "redirect:/movie/" + movieId;
@@ -225,19 +232,13 @@ public class MovieController {
 		return "redirect:/index";
 	}
 
-	//Delete user from database
-	@RequestMapping(value="/delete/user/{id}")
-	@PreAuthorize("hasAuthority('ADMIN')")
-	public String deleteUser(@PathVariable("id") Long userId, Model model) {
-		userRepository.deleteById(userId);
-		return "redirect:/adminpage";
-	}
 	//Upload a poster for the movie
 	@PostMapping(value="/uploadfile/{id}")
 	public String submit(@PathVariable("id") Long movieId, @RequestParam("file") MultipartFile file) {
 		
 		if(file != null && !file.isEmpty()) {
 			try {
+				//Save file as byte[] array
 				byte[] bytes = file.getBytes();
 				Movie movie = movieRepository.findById(movieId).get();
 				movie.setPosterData(bytes);
@@ -252,15 +253,12 @@ public class MovieController {
 	
 	//REST API
 	@RequestMapping("/api/movies") 
-	public @ResponseBody List<Movie> getAllMovies(){
+	public @ResponseBody List<Movie> getAllMoviesREST(){
 		return (List<Movie>) movieRepository.findAll();
 	}
-	@RequestMapping("/api/users") 
-	public @ResponseBody List<User> getAllUsers(){
-		return (List<User>) userRepository.findAll();
-	}
+
 	@RequestMapping("/api/movies/{title}") 
-	public @ResponseBody List<Movie> getAllReviews(@PathVariable("title") String title){
+	public @ResponseBody List<Movie> getMovieREST(@PathVariable("title") String title){
 		return (List<Movie>) movieRepository.findByTitle(title);
 	}
 }

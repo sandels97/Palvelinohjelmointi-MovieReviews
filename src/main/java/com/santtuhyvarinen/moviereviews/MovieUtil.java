@@ -7,6 +7,7 @@ import com.santtuhyvarinen.moviereviews.domain.Movie;
 import com.santtuhyvarinen.moviereviews.domain.Review;
 
 public class MovieUtil {
+	
 	public static double calculateAverageScoreFromReviews(Movie movie, List<Review> reviews) {
 		
 		double sum = 0;
